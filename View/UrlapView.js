@@ -1,91 +1,73 @@
-import TextUrlapElem from "./TextUrlapElem.js"
+import TextUrlapElem from "./TextUrlapElem.js";
+import NumberUrlapElem from "./NumberUrlapElem.js";
 
-class View{
-    #leiro=[]
-    #urlapElemList = []
-    #valid = true
-    #urlapAdatok={}
-constructor(szuloelem, leiro){
-this.#leiro = leiro
-this.szuloelem = szuloelem
-this.szuloelem.append("<form>")
-this.formelem= this.szuloelem.children("form")
+class View {
+    #leiro;
+  #urlapElemList = [];
+  #valid = true
+  #urlapAdatok = {}
+  constructor(szulElem, leiro) {
+    this.szuElem = szulElem;
+    this.#leiro = leiro;
+    this.szuElem.append("<form>");
+    this.formElem = this.szuElem.children("form");
+  
+    this.#urlapLetrehoz();
+    this.SubmitElem = $("#submit");
+    this.SubmitElem.on("click", (event) => {
+      event.preventDefault();
+      this.#valid=true
+        this.#urlapElemList.forEach((elem)=>{
+         
+          this.#valid= this.#valid && elem.valid 
+          console.log(this.#valid)
+          
+        })
+        if (this.#valid) {
+          this.#urlapElemList.forEach((elem)=>{
+            let ertek = elem.ertek
+            let kulcs = elem.key
+            this.#urlapAdatok[kulcs]=ertek
+            console.log(this.#urlapAdatok) 
+          })
+          console.log("valid az urlap")
 
-this.#urlapLetrehoz()
-this.submitElem = $("#submit")
-this.submitElem.on("click", (event)=>{
-    event.preventDefault()
-    this.#valid = true
-this.#urlapElemList.forEach((elem)=>{
-    console.log(elem.valid)
-    this.#valid = this.#valid && elem.valid
-    console.log(this.#valid)
-})
-if (this.#valid) {
-    console.log("valid az űrlap")
-    this.#urlapElemList.forEach((elem)=>{
-        let ertek = elem.ertek
-        let kulcs = elem.key
-        this.#urlapAdatok[kulcs]=ertek
-        
-        //console.log(this.#urlapAdatok)
-    })
-
-}
-else{
-    console.log("nem az")
-}
-this.#sajatEsemenyKezelo("valid")
-})
-}
-#urlapLetrehoz(){
-    for (const key in this.#leiro) {
-        switch (this.#leiro[key].type) {
-            case "text":
-              //this.#textElem(key);
-               this.#urlapElemList.push(new TextUrlapElem(key, this.#leiro[key], this.formelem)) 
-                break;
-                case "number":
-                    this.#numberElem(key);
-                    break;
-            default:
-                break;
+        }else{
+          console.log("nem valid az urlap")
         }
+        this.#esemenyTrigger("katt")
+      
+    });
+  }
+  
+  #urlapLetrehoz() {
+    let txt = "";
+
+    for (const key in this.#leiro) {
+      switch (this.#leiro[key].type) {
+        case "text":
+          this.#urlapElemList.push(
+            new TextUrlapElem(key, this.#leiro[key], this.formElem)
+          );
+          break;
+        case "number":
+          this.#urlapElemList.push(
+            new NumberUrlapElem(key, this.#leiro[key], this.formElem));
+          break;
+        case "checkbox":
+          this.#urlapElemList.push(
+              new CheckboxUrlapElem(key, this.#leiro[key], this.formElem));
+            break;
+        default:
+        // code block
+      }
     }
-    
-    let txt = `<input type="submit" id="submit" value="ok">`
-    this.formelem.append(txt)
-    }
-   
-    
-
-#numberElem(key){
-    let txt=""
-
-       txt+=`
-    <div class="mb-3 mt-3">
-    <label for="${key}" class="form-label">${this.#leiro[key].megj}</label>
-    <input type="${this.#leiro[key].type}" class="form-control" id="${key}" 
-    placeholder="${this.#leiro[key].placeholder}" name="${key}"
-    value="${this.#leiro[key].value}"
-    min="${this.#leiro[key].min}"
-    max="${this.#leiro[key].max}"
-    
-    ">
-    <div class="valid lathato">OK</div>
-    <div class="invalid lathato">${this.#leiro[key].valid}</div>
-  </div>
-    `
-    this.formelem.append(txt)
-    
-
-}
-#sajatEsemenyKezelo(esemenynev){
-    
-    const esemenyem = new CustomEvent(esemenynev, {detail:this})
+    txt = `<input type="submit" id = "submit" value="ok" >`;
+    this.formElem.append(txt);
+  }
+  #esemenyTrigger(esemenynev){
+    const esemenyem = new CustomEvent(esemenynev,{detail:this})
     window.dispatchEvent(esemenyem)
+  }
 }
-
-
-}
-export default View
+export default View;
