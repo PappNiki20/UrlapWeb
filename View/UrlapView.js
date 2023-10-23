@@ -1,5 +1,6 @@
 import TextUrlapElem from "./TextUrlapElem.js";
 import NumberUrlapElem from "./NumberUrlapElem.js";
+import FeliratElem from "./FelIratElem.js";
 
 class View {
     #leiro;
@@ -56,8 +57,9 @@ class View {
           break;
         case "checkbox":
           this.#urlapElemList.push(
-              new CheckboxUrlapElem(key, this.#leiro[key], this.formElem));
+              new FeliratElem(key, this.#leiro[key], this.formElem));
             break;
+            
         default:
         // code block
       }
