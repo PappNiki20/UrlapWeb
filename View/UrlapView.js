@@ -10,7 +10,7 @@ this.#leiro = leiro
 this.szuloelem = szuloelem
 this.szuloelem.append("<form>")
 this.formelem= this.szuloelem.children("form")
-console.log(this.formelem)
+
 this.#urlapLetrehoz()
 this.submitElem = $("#submit")
 this.submitElem.on("click", (event)=>{
@@ -81,7 +81,7 @@ this.#sajatEsemenyKezelo("valid")
 
 }
 #sajatEsemenyKezelo(esemenynev){
-    console.log(esemenynev)
+    
     const esemenyem = new CustomEvent(esemenynev, {detail:this})
     window.dispatchEvent(esemenyem)
 }

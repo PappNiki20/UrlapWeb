@@ -10,11 +10,11 @@ class TextUrlapElem {
         this.formelem = szuloelem
         this.#textElem()
         this.inputElem = $(`#${this.#key}`)
-        console.log(this.inputElem)
+       
         this.validElem = this.formelem.children("div:last-child").children(".valid")
-        console.log(this.validElem)
+       
         this.invalidElem = this.formelem.children("div:last-child").children(".invalid")
-        console.log(this.invalidElem)
+        
         this.#valid = false
 
         this.inputElem.on("keyup", () => {
